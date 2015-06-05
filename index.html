@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Dev -->
+    <script src="libs/underscore.js"></script>
+    <script src="libs/backbone.js"></script>
+    <script src="libs/backbone.localStorage.js"></script>
+    <script src="libs/jquery-2.1.3.js"></script>
+    <script src="libs/react-with-addons.js"></script>
+    <script src="libs/JSXTransformer.js"></script>
+
+    <!-- Production 
+    <script src="libs/underscore-min.js"></script>
+    <script src="libs/backbone-min.js"></script>
+    <script src="libs/backbone.localStorage-min.js"></script>
+    <script src="libs/jquery-2.1.3.min.js"></script>
+    <script src="libs/react.js"></script>
+    <script src="libs/JSXTransformer.js"></script>
+
+    -->
+    <link rel="stylesheet" type="text/css" href="css/reset.min.css"> <!-- RESET CSS -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">     <!-- SITE CSS -->
+    <link rel="stylesheet" type="text/css" href="css/page_dashboard.css"> <!-- PAGE CSS -->
+
+  </head>
+  <body>
+    <div id="page-dashboard" class="page">
+
+      <div id="navbar">
+        <section class="left-small"><a href="./dashboard.html">FFN</a></section>
+        <section class="middle tab-bar-section">
+          <ul>
+            <li><a href="./notification.html">公告<span class="bubble">4</span></a></li>
+            <li><a href="./calendar.html">行事曆<span class="bubble">2</span></a></li>
+            <li><a href="./advance.html">進階工具</a></li>
+          </ul>
+        </section>
+        <section class="right-small"><a href="./settings.html">Dorain</a></section>
+      </div>
+      
+      <section id="status">
+        <section><div class="user">我</div><div class="history">歷史紀錄</div></section>
+        <section class="timeout_list row">
+          <div class="small-4 columns">特休 9/10</div>
+          <div class="small-4 columns">全薪病 10/15</div>
+          <div class="small-4 columns">補休 0</div>
+        </section>
+        <section class="application_list row">
+          <div class="small-4 columns">待簽 2</div>
+          <div class="small-4 columns">待補 1</div>
+        </section>
+      </section>
+
+      <div id="calendar">行事曆</div>
+
+      <div id="announcement">公告</div>
+
+
+      <div id="tool">+</div>
+    </div>
+
+<script src="js/FFN.js"></script>
+<script type="text/jsx" id="component-navbar"> //暫時先放在一起 src="jsx/navbar.jsx">
+
+/**
+ * @class {ReactComponent} Navbar 
+ *
+
+
+FFN.createComponent(
+    'Navbar',                              //元件名稱
+    ['announcement:new', 'calendar:new'],  //必要資料:額外分類  => 可能有string ('all', 'none', '資料名[:類別]') 或string array
+    function (config) {     //可能為function 或 object, 若是function, 會在runtime把config當成參數傳入, 需回傳一個object
+      onLocalDataLoaded : function() {},
+      render : React.render
+});
+ */
+FFN.components.Navbar = React.createClass({
+    /** React內有特殊功能的function */
+    statics : {
+        static_method: function(){}
+    },
+    getInitialState : function() {
+        //元件最初的state, 可在render function中以this.state.xxxx 調用
+        return { logged : false, current_tab : 'dashboard' };
+    },
+    componentWillMount: function () {
+          
+    },
+    componentDidMount: function () {
+          
+    },
+
+    render : function() {
+        var state = this.state,
+            props = this.props;
+
+console.dir(this);
+
+        return (
+<nav className="navbar">
+    <section className="logo left-small"><a href="./dashboard.html">FFN</a></section>
+    <section className="menu middle tab-bar-section">
+      <ul>
+        <li ref="tab_announcement" onClick={this.switchTab}><a href="./notification.html">公告     <span className="bubble">{~~(Math.random() * 10)}</span></a></li>
+        <li ref="tab_calendar"     onClick={this.switchTab}><a href="./calendar.html"    >行事曆   <span className="bubble">{~~(Math.random() * 10)}</span></a></li>
+        <li ref="tab_tools"        onClick={this.switchTab}><a href="./advance.html"     >進階工具                                                         </a></li>
+      </ul>
+    </section>
+    <section className="user right-small"><a href="./settings.html">Dorain</a></section>
+</nav>
+        );
+    },
+
+    /** Class自用function */
+    switchTab : function(e) {
+        debugger;
+        console.dir(e);
+        console.dir(this.refs.tab_tools);
+    }
+
+
+});
+
+</script>
+
+<script type="text/jsx">
+  var lang = {
+    'zhTW' : {
+      'navbar_announcement' : '公告',
+      'navbar_calendar'     : '日曆',
+      'navber_tools'        : '進階工具'
+    }
+  };
+  FFN.components.Navbar({lang : lang},{ hello : 'world'});
+  React.render(
+    <FFN.components.Navbar />,
+    document.getElementById('navbar')
+  );
+</script>
+
+  </body>
+</html>

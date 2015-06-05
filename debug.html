@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>DEBUG測試用</title>
+  <script src="libs/react.min.js"></script>
+  <script src="libs/require.js"></script>
+</head>
+<body>
+  <div id="hi"></div>
+
+  <script>
+    var hi = document.getElementById('hi');
+
+    require(['js/test1'], function(Com1) { React.render(React.createElement(Com1, {name: "John"}), hi); });
+
+    
+  </script>
+</body>
+</html>

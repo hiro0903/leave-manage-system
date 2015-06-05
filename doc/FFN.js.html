@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FFN.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FFN.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
+ * @file FFN 請假系統核心功能
+ * @author Chris Chu
+ */
+
+
+/** @namespace FFN  */
+self.FFN = (function(){
+    var ffn = {  // self.FFN 
+            components: {},
+            settings: {},
+            data: {}
+        },  
+        /** @access private */
+        app;
+
+/*
+==================== MEMBER(PRIVATE) FUNCTIONS ====================
+*/
+
+    /** 
+     * @function _extend
+     * @memberof FFN
+     * @access private
+     * @param {Backbone.Model} parent
+     * @param {Function} prototype of child
+     * @param {Object} static properties
+     * @return {Backbone.Model}
+     */
+    function _extend(parent, child_proto, child_static) {
+        child_proto.defaults = _.extend(parent.prototype.defaults, child_proto.defaults);
+        return parent.extend(child_proto, child_static);
+    }
+
+/*
+==================== PRIVATE CLASSES ====================
+*/
+
+    /** 
+     * @class FFN.App
+     * @memberof FFN
+     * @constructor 
+     */
+    function App() {
+        /** @access private */
+        var private = true;
+
+        /** @access protected */
+        this._protected = {};
+
+        /** @access public */
+        this.public = function trytry() {}
+    }
+
+
+/*
+==================== PUBLIC CLASSES ====================
+*/
+
+    /**
+     * @class ApplicationForm
+     * @memberof FFN
+     * @desc Backbone model, 基本申請表單
+     */
+    ffn.ApplicationForm = Backbone.Model.extend({  //申請表
+        defaults: {
+          id : '',
+          flow_id: 0,  //每種表單有自己的流程
+          status : 0   //表單在流程中的狀態
+        },
+        delete : function(){ console.log('deleted'); }
+    });
+
+/*
+==================== PUBLIC FUNCTIONS ====================
+*/
+
+    /**
+     * @function getApp
+     * @return {FFN.App} instance of app 
+     * @memberof FFN
+     * @description 取得整個App object, 可關閉程式...etc
+     */
+    ffn.getApp = function() {
+        //TODO: singleton pattern 取得整個app
+        if (!app) {
+          app = new App();
+        }
+        return app;
+    };
+
+    /**
+     * This callback type is called `requestCallback` and is displayed as a global symbol.
+     *
+     * @callback customClass
+     * @param {object} data
+     * @param {DOMElement} container - 用來顯示新增class的容器
+     * @return {object} refs to connect with your new class.
+     */
+
+    /**
+     * @function addClass
+     * @param {string} name
+     * @param {customClass} custom_class - 自定義的Class
+     * @param {(string|string[])} require_data - 會在初始化時提供所需資料, 並在該類型資料更新時觸發callback
+     * @param {string} [type='custom'] - 新增的Class類型, 目前支援custom | react
+     * @return {object} FFN
+     * @memberof FFN
+     * @description 註冊一個新的FFN Class
+     */
+    ffn.addClass = function(name, custom_class, require_data, type) {
+        var _type = ('string' === typeof(type)) ? type.toLowerCase() : 'custom',
+            _com  = ffn.components || {};
+
+        if (name &amp;&amp; custom_class &amp;&amp; !_com[name]) { 
+            _com[name] = {
+                class : custom_class,
+                type  : _type
+            }
+            return this;
+        } else {
+            throw Error('FFN.addClass: 無效的命名或建構式, 或是名稱重複');
+        }
+    };
+
+    ffn.addReactClass = function(name, react_class, require_data) {
+        return addClass.apply(this, name, react_class, require_data, 'react');
+    }
+
+    return ffn;
+}());
+
+        
+/**
+ * 設定檔
+ */
+FFN.Setting = Backbone.Model.extend({ 
+  defaults: {
+    name : '',
+    on   : false  //每個設定假設都有開關, 之後依照各自需求加入value
+  },
+  toggle : function() {  //開關切換, 之後存到local
+    this.save({
+      on : !this.get('on')
+    });
+  }
+});
+
+
+//單位假單
+
+
+//使用者資料
+
+//Collections
+
+
+/** 
+  Page JS
+**/
+!function(){
+
+  var CONFIG = {
+    //每個功能各自需要的設定檔
+    calendar    : { id: 'calendar',     show: true },
+    announcement: { id: 'announcement', show: true },
+    tool        : { id: 'tool',         show: true }
+
+
+  };
+
+  self.FFN.CONFIG = CONFIG;
+}();
+
+    </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="FFN.App.html">App</a></li><li><a href="FFN.ApplicationForm.html">ApplicationForm</a></li></ul><h3>Namespaces</h3><ul><li><a href="FFN.html">FFN</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Thu Mar 19 2015 19:04:46 GMT+0800 (台北標準時間)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
