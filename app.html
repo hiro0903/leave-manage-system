@@ -37,7 +37,7 @@
  * 
  */
 
-    var ffn = {}, 
+    var ffn = {},
         _dataType, _dataTypeList,  //管理資料類型
         _data = {},                 //存放各種類型的data collection
         _action = _.clone(Backbone.Events),   //用來分配event
@@ -168,15 +168,13 @@
     ffn.on = _lifeCycle.on.bind(_lifeCycle);
     
     window.addEventListener('DOMContentLoaded', function(){ _lifeCycle.trigger('init'); });
-    debugger;
+    console.log('core loaded...');
 })();
 
 
 </script>
 
 <script type="text/jsx">
-    FFN.on('init', function(e) { console.log('now now'); });
-    
 (function(){
     var navbar = React.createClass({
         displayName : 'Navbar',
@@ -185,13 +183,11 @@
         statics     : { getName : function(){ return this.displayName; } },  //在static中, this 是 class 而非instance
 
         getInitialState: function () {
-          return { comments: [] };
+            return { comments: [] };
         },
         getDefaultProps: function () {
-          return { name: "Hello" };
+            return { name: "Hello" };
         },
-
-        //Lifecycle Methods:
 
         componentWillMount : function() {},  //只會觸發一次(server & client), 在首次render之前, 在這禮面setState不會重複render
         componentDidMount  : function() {},  //只會觸發一次(client), 在首次render後
@@ -199,8 +195,14 @@
         componentWillReceiveProps : function(nextProps){}, //Calling this.setState() within this function will not trigger an additional render.
         componentWillUpdate: function() {},  //cannot use this.setState() in this method.
 
-        ///////////////////////
-        render : function(){ return (<div>test....</div>); }
+        _customFunction : function(val) { this.setState(val); },
+        render : function(){
+            var style = {
+                backgroundColor : '#CAA',
+                display         : 'block'
+            }; 
+            return (<div style={ style }>{this.props.name + ': NAVBAR....' + (this.state.debug ? 'DEBUG MODE' : 'Normal Mode')}</div>); 
+        }
     });
 
     FFN.addComponent(navbar, {
@@ -210,17 +212,45 @@
         }
     });
 
-//////////////////////////////////////////////
-    var Navbar = FFN.getComponent('Navbar');
-    React.renderComponent( <Navbar />, document.body );
-    
-    console.log('navbar added');
-
 })();
-  
-</script>
-<script type="text/jsx">
+
+(function(){
+    var App = React.createClass({
+        displayName : 'App',
+        propTypes   : {},
+        mixins      : [],
+        statics     : {},
+        getInitialState: function () {
+            return { 
+                connected: false 
+            };
+        },
+        getDefaultProps: function () {
+            return { 
+                username: "" 
+            };
+        },
+
+        componentWillMount : function() { },
+        componentDidMount  : function() {},
+
+        componentWillReceiveProps : function(nextProps){}, 
+        componentWillUpdate: function() {},
+
+
+        render : function(){
+            var Navbar = FFN.getComponent('Navbar'); 
+            
+            return <div><Navbar ref="navbar" /></div>;
+        }
+    });
     
+    function init() {
+        FFN.App = React.render(<App />, document.body );
+    }
+    
+    FFN.on('init', init);
+})();
 </script>
 
   </body>
